@@ -16,45 +16,53 @@ let polyline // La polyline en cours de construction;
 
 const polylineMachine = createMachine(
     {
-        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiAMwBWZUT4BORQDZtAFgDsB5Qe0aAHABoQmRMu3qATI70blj5Rq3PzygL5+1mhYeIREAAroAIYAxmAABACu+PFoBOIUTLAxUchg-EJIIGhiktKyCgjufOrmpgCM9cp8Rnp62ta2CAC0ijXmOu2Keo4aoxbmAUEYOATEkbEJyamo6dT0zGycvIKyJRJSMkWVKmrao+7KIwbmjor1nYgeekR6zc7a5oYG7aZTxTNQvNonEkik0vgMrRGExaAA1JgFPaiA7lY6IAx9IifFSuep8c6OeoaR4IZwGJxjEbKYZ1cz1f7BWZhACCACMovgINJCPFyHyonzcFBebFxIkwOhyJkAG5gSHxepIor7MpHUAnDQU5T1RzmPhtCxGOqk7rmDREc26Yn1bRNPjmgKBED4VAQODIkJzZGlQ4VRD1G6vPR8RQqYlGO58RymwPmIj3MN6Jq2n4G-zOplAkhkMA+1Hq+RPRwONqh8NagxRmM2DE1SPNfT1VxEgwMzOAuYREFLcGrSH5tX+qohhM0j4Evg6vRWWsIAz1qvNLVfKftSYdr2sjlcnkJfnRIUihJiiVSvMqlFD9FVQNEHV6g2uOo3AymjT1IjN63KL6feqKGMjKdmEABCqCJDAfIJBC4jxFEiTxGy0jxPKEAAE6rOIg5+je5oUsmf7NqGPwknO5KUi4Hi0jc7YBEAA */
+        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiAMwA2AKxEA7H2UAmAJwBGAzuV8+ADh0AWADQhMSvkSurVGjTvNWrOxV4MAvgF2aFh4hERM+AAE4gBOAIYE0RBgsYkAxmBxFEywGQnIYPxCSCBoYpLSsgoIfgZEanpWBnwGerptGqp2DggAtHo6jTqqeoqqfDqjQzpBIRg4BMRR6UkxqWtZObSMrBzcJbIVElIyZbUaVuZE2ubjlhoGLRq9iP0GVyMaQ1PGBm4OvNyotwisYvF1ik0pDttR6MxaAA1JhHMonKrnUC1cyqRSNczGVRWPhPSxDN4IExOZ6KPQdRRmHSkgzKYGhJYRVaQ5KbWHZXL4cTZNEiSpnGqIVkaIijcxmKx0qzKRQGRSUj5fXQ-Txue56Mwadmg5aRCGJXkwzICgBCCQyAGtYMh7cVBMdRKdqhdED4bm4LMoNMoXACpspKfo9ERDHw-Hx6QZ7so9EFgiB8KhUvB0SbCB7xd7sVL2rLVPK+Irmiq1QYNSYGj8XOM-h5zCpjWFTaRyAWvVj5IhpspnCTFBN2u5fFNKVpNB5JiHnkNPoF0xywWa1pattk+5jJQgxlZZUGVcpCRZPhH7L6T3pg60rMHxy4NOY0wEgA */
         id: "polyLine",
         initial: "idle",
         states : {
             idle: {
                 on: {
                     MOUSECLICK: {
-                        target:"Place un point",
-                        actions:["addPoint"]
+                        target:"En train de tracer",
+                        actions:["createLine"]
                     }
                 }
             },
 
-            "Place un point": {
+            "En train de tracer": {
                 on: {
                     Escape: {
-                        target: "Abandonne le la ligne actuelle",
-                        actions:  ["abandon"],
-                        cond: "Points>2"
+                        target: "idle",
+                        actions:  ["abandon"]
                     },
 
                     MOUSECLICK: {
-                        target: "Place un point",
+                        target: "En train de tracer",
                         internal: true,
                         actions:["addPoint"],
-                        cond: "Points < 10"
+                        cond: "pasPlein"
                     },
 
-                    MOUSEMOVE: "Bouge le point au bon endroit"
-                }
-            },
+                    MOUSEMOVE: {
+                        target:"En train de tracer",
+                        actions:["setLastPoint"],
+                        internal: true
+                    },
 
-            "Abandonne le la ligne actuelle": {
-                on: {
-                    "Event 1": "idle"
-                }
-            },
+                    Enter: {
+                        target: "idle",
+                        actions: ["saveLine"],
+                        cond: "plusDeDeuxPoints"
+                    },
 
-            "Bouge le point au bon endroit": {}
+                    Backspace: {
+                        target: "En train de tracer",
+                        actions:["removeLastPoint"],
+                        cond: "plusDeDeuxPoints",
+                        internal: true
+                    }
+                }
+            }
         }
     },
     // Quelques actions et guardes que vous pouvez utiliser dans votre machine
