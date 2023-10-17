@@ -16,7 +16,7 @@ let polyline // La polyline en cours de construction;
 
 const polylineMachine = createMachine(
     {
-        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiAMwBWZUT4BORQDZtAFgDsB5Qe0aAHABoQmRMu3qATI70blj5Rq3PzygL5+1mhYeIREAAroAIYAxmAABACu+PFoBOLU9MxsnLyCsmhiktKyCggqatqObh56jgbmjooAjNa2CLVEesp8ztrmhgZ62qYBQRg4BMSRsQnJqajpFEywMVHIYPxCSCCFElIyO2XufOrmppqO5ooGzYpWNogAtM2nvop6dxq1Ho7a-oFdhNQtNonEkik0vgMrRGExaAA1JhbAqifYlI6IAyKU79FSuV5VRzNDRtRDOAxOb51ZQfc7mZpjIEhKZEACCACMovgINJCPFyAKogLcFB+bFxIkwOhyMsAG5gaHxZoonZ7YqHUBlRQaSnKZpXPh6VznBoGMkIJ7mDREa26EnNbTNHrWgKA-CoCBwVEswioooHUqIZoNLp6PiKFQkoxNXoWl6hlqKK7mfojex6JnBSZhUjkf3ozXycl-MMRqO6gyxxwWgynGM9fTNVzE25Z4Gsmbg+ZQ8QFjVBhDKcNEFTJv58bR8fV6B7tOtEBuaBrh4f9du+4ic7m8-D8wXREVihISqUysD9wOYochoj6w3GixGc7xjTNIjN+3KAb9L6ODc5sQABCqCJDAAoJL28RRIk8QctI8SKhAABOix9mqaIDte1qUp8P7NhGQyko8HT1FSLgeHSDSMm6QA */
+        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiAMwBWZUT4BORQDZtAFgDsB5Qe0aAHABoQmRMu3qATI70blj5Rq3PzygL5+1mhYeIREAAroAIYAxmAABACu+PFoBOIUTLAxUchg-EJIIGhiktKyCgjufOrmpgCM9cp8Rnp62ta2CAC0ijXmOu2Keo4aoxbmAUEYOATEkbEJyamo6dT0zGycvIKyJRJSMkWVKmrao+7KIwbmjor1nYgeekR6zc7a5oYG7aZTxTNQvNonEkik0vgMrRGExaAA1JgFPaiA7lY6IAx9IifFSuep8c6OeoaR4IZwGJxjEbKYZ1cz1f7BWZhACCACMovgINJCPFyHyonzcFBebFxIkwOhyJkAG5gSHxepIor7MpHUAnDQU5T1RzmPhtCxGOqk7rmDREc26Yn1bRNPjmgKBED4VAQODIkJzZGlQ4VRD1G6vPR8RQqYlGO58RymwPmIj3MN6Jq2n4G-zOplAkhkMA+1Hq+RPRwONqh8NagxRmM2DE1SPNfT1VxEgwMzOAuYREFLcGrSH5tX+qohhM0j4Evg6vRWWsIAz1qvNLVfKftSYdr2sjlcnkJfnRIUihJiiVSvMqlFD9FVQNEHV6g2uOo3AymjT1IjN63KL6feqKGMjKdmEABCqCJDAfIJBC4jxFEiTxGy0jxPKEAAE6rOIg5+je5oUsmf7NqGPwknO5KUi4Hi0jc7YBEAA */
         id: "polyLine",
         initial: "idle",
         states : {
@@ -30,6 +30,7 @@ const polylineMachine = createMachine(
                 on: {
                     Escape: {
                         target: "Abandonne le la ligne actuelle",
+                        actions:  ["abandon"],
                         cond: "Points>2"
                     },
 
