@@ -16,12 +16,40 @@ let polyline // La polyline en cours de construction;
 
 const polylineMachine = createMachine(
     {
-        /** @xstate-layout N4IgpgJg5mDOIC5gF8A0IB2B7CdGgAcsAbATwBkBLDMfEI2SgF0qwzoA9EBaANnVI9eAOgAM4iZMkB2ZGnokK1MMMoRitJAsYs2nRABYATAMQAOAIzCD0gJwXetgwGZezgw9ty5QA */
+        /** @xstate-layout N4IgpgJg5mDOIC5QAcD2AbAngGQJYDswA6XCdMAYgFkB5AVQGUBRAYWwEkWBpAbQAYAuohSpYuAC65U+YSAAeiAMwBWZUT4BORQDZtAFgDsB5Qe0aAHABoQmRMu3qATI70blj5Rq3PzygL5+1mhYeIREAAroAIYAxmAABACu+PFoBOLU9MxsnLyCsmhiktKyCggqatqObh56jgbmjooAjNa2CLVEesp8ztrmhgZ62qYBQRg4BMSRsQnJqajpFEywMVHIYPxCSCCFElIyO2XufOrmppqO5ooGzYpWNogAtM2nvop6dxq1Ho7a-oFdhNQtNonEkik0vgMrRGExaAA1JhbAqifYlI6IAyKU79FSuV5VRzNDRtRDOAxOb51ZQfc7mZpjIEhKZEACCACMovgINJCPFyAKogLcFB+bFxIkwOhyMsAG5gaHxZoonZ7YqHUBlRQaSnKZpXPh6VznBoGMkIJ7mDREa26EnNbTNHrWgKA-CoCBwVEswioooHUqIZoNLp6PiKFQkoxNXoWl6hlqKK7mfojex6JnBSZhUjkf3ozXycl-MMRqO6gyxxwWgynGM9fTNVzE25Z4Gsmbg+ZQ8QFjVBhDKcNEFTJv58bR8fV6B7tOtEBuaBrh4f9du+4ic7m8-D8wXREVihISqUysD9wOYochoj6w3GixGc7xjTNIjN+3KAb9L6ODc5sQABCqCJDAAoJL28RRIk8QctI8SKhAABOix9mqaIDte1qUp8P7NhGQyko8HT1FSLgeHSDSMm6QA */
         id: "polyLine",
         initial: "idle",
         states : {
             idle: {
-            }
+                on: {
+                    MOUSECLICK: "Place un point"
+                }
+            },
+
+            "Place un point": {
+                on: {
+                    Escape: {
+                        target: "Abandonne le la ligne actuelle",
+                        cond: "Points>2"
+                    },
+
+                    MOUSECLICK: {
+                        target: "Place un point",
+                        internal: true,
+                        cond: "Points < 10"
+                    },
+
+                    MOUSEMOVE: "Bouge le point au bon endroit"
+                }
+            },
+
+            "Abandonne le la ligne actuelle": {
+                on: {
+                    "Event 1": "idle"
+                }
+            },
+
+            "Bouge le point au bon endroit": {}
         }
     },
     // Quelques actions et guardes que vous pouvez utiliser dans votre machine
