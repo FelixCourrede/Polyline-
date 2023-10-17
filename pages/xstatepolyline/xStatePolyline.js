@@ -22,7 +22,10 @@ const polylineMachine = createMachine(
         states : {
             idle: {
                 on: {
-                    MOUSECLICK: "Place un point"
+                    MOUSECLICK: {
+                        target:"Place un point",
+                        actions:["addPoint"]
+                    }
                 }
             },
 
@@ -37,6 +40,7 @@ const polylineMachine = createMachine(
                     MOUSECLICK: {
                         target: "Place un point",
                         internal: true,
+                        actions:["addPoint"],
                         cond: "Points < 10"
                     },
 
